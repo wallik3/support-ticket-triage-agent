@@ -1,0 +1,6 @@
+customer_id,name,plan,region,seats,tenure_months,login_frequency,previous_support_tickets,previous_critical_issues,upgrade_attempts,churn_risk,notes
+C001,Somchai Saejia,Free,Global,1,4,occasional,0,0,1,high,Attempted upgrade to Pro; multiple failed charges reported.
+C002,Thanawat Enterprises Co. Ltd.,Enterprise,Thailand (Asia),45,8,daily,0,0,0,high,First critical issue. Large account with upcoming client demo.
+C003,Jamie Lee,Pro,Global,1,5,daily,0,0,0,low,Active engaged user. First support contact.
+C004,Priya Mehta,Pro,Global,1,2,weekly,0,0,1,medium,Upgraded to Pro 2 days ago; plan activation may have failed silently.
+C005,Daniel Osei,Pro,US-East,1,11,daily,1,0,0,medium,Long-tenured Pro user; recurring export failures reported.

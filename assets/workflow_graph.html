@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Support Ticket Triage Agent — Workflow Graph</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 24px 60px;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #f8fafc;
+      margin-bottom: 4px;
+    }
+    .subtitle {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-bottom: 40px;
+    }
+
+    /* ── graph card ── */
+    .graph-card {
+      background: #1e2130;
+      border: 1px solid #2d3348;
+      border-radius: 16px;
+      padding: 40px 48px;
+      width: 100%;
+      max-width: 860px;
+      margin-bottom: 40px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .mermaid svg { max-width: 100%; height: auto; }
+
+    /* ── legend ── */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      color: #94a3b8;
+    }
+    .legend-dot {
+      width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0;
+    }
+
+    /* ── node detail cards ── */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+      width: 100%;
+      max-width: 860px;
+    }
+
+    .card {
+      background: #1e2130;
+      border: 1px solid #2d3348;
+      border-radius: 12px;
+      padding: 16px 18px;
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .card-icon {
+      width: 28px; height: 28px; border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; flex-shrink: 0;
+    }
+    .card-title { font-size: 0.82rem; font-weight: 700; color: #f1f5f9; }
+    .card-mode  { font-size: 0.68rem; color: #64748b; margin-top: 1px; }
+    .card-tools { list-style: none; padding: 0; }
+    .card-tools li {
+      font-size: 0.73rem; color: #94a3b8;
+      padding: 3px 0; border-top: 1px solid #2d3348;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .card-tools li:first-child { border-top: none; }
+    .badge {
+      font-size: 0.6rem; padding: 1px 5px; border-radius: 4px;
+      font-weight: 600; flex-shrink: 0;
+    }
+    .badge-tool     { background: #1d3a52; color: #38bdf8; }
+    .badge-output   { background: #1a3a2a; color: #4ade80; }
+    .badge-data     { background: #2d2040; color: #a78bfa; }
+
+    /* colour palette */
+    .col-classify   { background: #1e3a5f; }
+    .col-generalist { background: #1a3a2a; }
+    .col-decide     { background: #3a2e10; }
+    .col-specialist { background: #2d1a3a; }
+    .col-tools      { background: #2d2020; }
+    .col-io         { background: #1e2130; border: 1px solid #3a4060; }
+
+    /* mermaid theme overrides */
+    :root {
+      --md-primary: #3b82f6;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Support Ticket Triage Agent</h1>
+  <p class="subtitle">LangGraph workflow — classify → generalist → decide → specialist (conditional)</p>
+
+  <div class="graph-card">
+    <div class="mermaid">
+%%{init: {
+  "theme": "base",
+  "themeVariables": {
+    "primaryColor":       "#1e3a5f",
+    "primaryTextColor":   "#e2e8f0",
+    "primaryBorderColor": "#3b82f6",
+    "lineColor":          "#64748b",
+    "secondaryColor":     "#1a3a2a",
+    "tertiaryColor":      "#2d1a3a",
+    "background":         "#1e2130",
+    "mainBkg":            "#1e2130",
+    "nodeBorder":         "#3b82f6",
+    "clusterBkg":         "#1e2130",
+    "titleColor":         "#f8fafc",
+    "edgeLabelBackground":"#1e2130",
+    "fontSize":           "14px"
+  }
+}}%%
+flowchart TD
+
+    START(["●  START"]):::io
+
+    CL["<b>classify_node</b><br/><small>urgency · sentiment · language · issue_type<br/></small>"]:::classify
+
+    GN["<b>generalist_node</b><br/><small>check_customer_profile<br/>lookup_general_kb</small>"]:::generalist
+
+    GT(["⚙ general_tools<br/><small>ToolNode</small>"]):::toolnode
+
+    DN["<b>decide_node</b><br/><small>auto_respond  or  escalate<br/>+ specialist_queue · reasoning</small>"]:::decide
+
+    SP["<b>specialist_node</b><br/><small>get_recent_logs<br/>lookup_technical_kb</small>"]:::specialist
+
+    ST(["⚙ specialist_tools<br/><small>ToolNode</small>"]):::toolnode
+
+    END(["●  END"]):::io
+
+    START --> CL
+    CL --> GN
+    GN -->|"tool_calls present"| GT
+    GT -->|"ToolMessage results"| GN
+    GN -->|"no tool_calls"| DN
+    DN -->|"auto_respond<br/>draft_response written"| END
+    DN -->|"escalate<br/>specialist_queue set"| SP
+    SP -->|"tool_calls present"| ST
+    ST -->|"ToolMessage results"| SP
+    SP -->|"no tool_calls<br/>specialist_notes stored"| END
+
+    classDef io         fill:#1e2130,stroke:#3a4060,color:#94a3b8,font-style:italic
+    classDef classify   fill:#1e3a5f,stroke:#3b82f6,color:#e2e8f0
+    classDef generalist fill:#1a3a2a,stroke:#22c55e,color:#e2e8f0
+    classDef decide     fill:#3a2e10,stroke:#f59e0b,color:#e2e8f0
+    classDef specialist fill:#2d1a3a,stroke:#a78bfa,color:#e2e8f0
+    classDef toolnode   fill:#2d2020,stroke:#ef4444,color:#e2e8f0,stroke-dasharray:5 3
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div> classify — structured output</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div> generalist — ReAct / bind_tools</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div> decide — structured output</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#a78bfa"></div> specialist — ReAct / bind_tools</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#ef4444; border-radius:2px; outline: 2px dashed #ef4444; outline-offset:2px;"></div> ToolNode (LangGraph built-in)</div>
+  </div>
+
+  <div class="cards">
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon col-classify">🏷</div>
+        <div>
+          <div class="card-title">classify_node</div>
+          <div class="card-mode">with_structured_output</div>
+        </div>
+      </div>
+      <ul class="card-tools">
+        <li><span class="badge badge-output">out</span> urgency</li>
+        <li><span class="badge badge-output">out</span> sentiment</li>
+        <li><span class="badge badge-output">out</span> detected_language</li>
+        <li><span class="badge badge-output">out</span> issue_type · product</li>
+        <li><span class="badge badge-data">csv</span> customer_data (customers.csv)</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon col-generalist">🔍</div>
+        <div>
+          <div class="card-title">generalist_node</div>
+          <div class="card-mode">bind_tools — ReAct loop</div>
+        </div>
+      </div>
+      <ul class="card-tools">
+        <li><span class="badge badge-tool">tool</span> check_customer_profile</li>
+        <li><span class="badge badge-tool">tool</span> lookup_general_kb</li>
+        <li><span class="badge badge-data">kb</span> General KB (user-facing)</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon col-decide">🧭</div>
+        <div>
+          <div class="card-title">decide_node</div>
+          <div class="card-mode">with_structured_output</div>
+        </div>
+      </div>
+      <ul class="card-tools">
+        <li><span class="badge badge-output">out</span> action (auto_respond / escalate)</li>
+        <li><span class="badge badge-output">out</span> specialist_queue</li>
+        <li><span class="badge badge-output">out</span> draft_response (if auto)</li>
+        <li><span class="badge badge-output">out</span> reasoning</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon col-specialist">🔬</div>
+        <div>
+          <div class="card-title">specialist_node</div>
+          <div class="card-mode">bind_tools — ReAct loop</div>
+        </div>
+      </div>
+      <ul class="card-tools">
+        <li><span class="badge badge-tool">tool</span> get_recent_logs</li>
+        <li><span class="badge badge-tool">tool</span> lookup_technical_kb</li>
+        <li><span class="badge badge-data">csv</span> error_logs.csv</li>
+        <li><span class="badge badge-data">kb</span> Technical KB (ops/engineering)</li>
+        <li><span class="badge badge-output">out</span> specialist_notes</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      flowchart: { htmlLabels: true, curve: 'basis', padding: 20 },
+      securityLevel: 'loose',
+    });
+  </script>
+</body>
+</html>

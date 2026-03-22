@@ -1,0 +1,16 @@
+log_id,customer_id,session_id,timestamp,level,service,error_code,message,affected_component
+LOG001,C001,WS003,2026-03-22 07:17:00,ERROR,payment-service,PAYMENT_METHOD_DECLINED,Card declined by issuer: card restriction or insufficient funds,stripe-gateway
+LOG002,C001,WS004,2026-03-22 08:30:00,ERROR,payment-service,CHARGE_CREATION_FAILED,Idempotency key collision: duplicate charge attempt detected on same customer token,stripe-gateway
+LOG003,C001,WS005,2026-03-22 09:45:00,ERROR,payment-service,CHARGE_CREATION_FAILED,Idempotency key collision: duplicate charge attempt detected on same customer token,stripe-gateway
+LOG004,C001,WS006,2026-03-22 10:00:00,WARN,billing-service,PENDING_CHARGE_DETECTED,3 pending charges found for customer C001 without successful plan activation,billing-db
+LOG005,C002,WS007,2026-03-22 07:00:00,ERROR,app-server,HTTP_500,Unhandled NullPointerException in RegionRouter.getRegion(): asia shard config missing,app-server-asia
+LOG006,C002,WS008,2026-03-22 07:05:00,ERROR,app-server,HTTP_500,Unhandled NullPointerException in RegionRouter.getRegion(): asia shard config missing,app-server-asia
+LOG007,C002,WS009,2026-03-22 07:30:00,ERROR,app-server,HTTP_503,ServiceUnavailable: region=asia deployment rollout in progress (canary 40%),load-balancer-asia
+LOG008,C002,WS010,2026-03-22 08:00:00,ERROR,app-server,HTTP_500,Unhandled NullPointerException in RegionRouter.getRegion(): asia shard config missing,app-server-asia
+LOG009,C002,WS011,2026-03-22 08:15:00,WARN,monitoring,STATUS_PAGE_LAG,Status page not updated: asia-region degradation not reflected (delay ~2h),status-service
+LOG010,C003,WS014,2026-03-21 10:05:00,WARN,ui-service,DARK_MODE_OPTION_MISSING,Dark mode toggle not rendered for plan=Pro: feature-flag dark_mode_pro disabled in frontend config,frontend-config
+LOG011,C004,,2026-03-20 14:32:00,ERROR,billing-service,STRIPE_WEBHOOK_FAILED,Stripe webhook delivery failed for event evt_1OxK2P (charge.succeeded): 500 from /webhooks/stripe,webhook-handler
+LOG012,C004,,2026-03-20 14:32:05,WARN,billing-service,PLAN_ACTIVATION_SKIPPED,Plan upgrade for C004 skipped: charge.succeeded webhook not processed; manual activation required,billing-db
+LOG013,C005,,2026-03-22 07:10:00,ERROR,export-service,EXPORT_FAILED,UnhandledPromiseRejection: Cannot read properties of undefined (reading 'toCSV') at ExportJob.run,export-worker
+LOG014,C005,,2026-03-22 08:45:00,ERROR,export-service,EXPORT_FAILED,UnhandledPromiseRejection: Cannot read properties of undefined (reading 'toCSV') at ExportJob.run,export-worker
+LOG015,C005,,2026-03-22 09:55:00,ERROR,export-service,EXPORT_TIMEOUT,Export job timed out after 30s: dataset size=142k rows; worker OOM suspected,export-worker
