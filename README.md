@@ -180,9 +180,3 @@ Ticket 2 :
 
 Ticket 3 :
 ![](assets/images/ticket_3_result.png)
-
-Ticket 4 :
-![](assets/images/ticket_4_result.png)
-
-Ticket 5 :
-![](assets/images/ticket_5_result.png)
