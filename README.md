@@ -4,6 +4,8 @@ An AI agent that classifies, researches, and routes incoming customer support ti
 
 ![](assets/images/graph.png)
 
+<u>Note</u>: This project uses the Gemini API due to the availability of a free API key. <u><b>If the OpenAI API key is not working</b></u>, please report the issue and continue using the Gemini API key while awaiting a fix.
+
 ## What it does
 
 For each ticket the agent runs a four-stage pipeline:
